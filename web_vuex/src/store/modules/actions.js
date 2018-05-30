@@ -12,10 +12,12 @@ const state = {
   temp_name: ''
 }
 const getters = {
-  add: (state, getter) => {
-    console.log(getter)
-    state.main = getter.add
-    return state.main
+  currentUser: state => {
+    return {
+      email: state.login_email,
+      token: state.login_token,
+      name: state.login_name
+    }
   }
 }
 
@@ -24,12 +26,14 @@ const mutations = {
     // console.log(state)
     state.main--
   },
+
   ADD_COUNTER (state, payload) {
-    console.log(state, payload)
+    // console.log(state, payload)
     state.main++
   },
+
   updateData (state, payload) {
-    // console.log(payload)
+    console.log(state, payload)
     switch (payload.name) {
       case 'email':
         state.temp_email = payload.value
@@ -44,6 +48,7 @@ const mutations = {
         console.log('Error:Dont directly mutate Vuex store')
     }
   },
+
   setUser (state, payload) {
     console.log(state)
     console.log(payload)
@@ -57,8 +62,9 @@ const actions = {
   someAsyncTask ({ commit }) {
     commit('ADD_COUNTER')
   },
+
   login ({ commit }, payload) {
-    // console.log(payload)
+    console.log(payload)
     commit({
       type: 'setUser',
       email: payload.email,

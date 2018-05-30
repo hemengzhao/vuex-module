@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapGetters } from 'vuex'
+import { mapState, mapMutations, mapGetters, mapActions } from 'vuex'
 export default {
   name: 'HelloWorld',
   data () {
@@ -30,25 +30,27 @@ export default {
   methods: {
     // Dispatching getBook
     addit () {
-      console.log(this.$store)
-      this.$store.dispatch('someAsyncTask')
+      this.someAsyncTask()
+//      this.$store.dispatch('someAsyncTask')
     },
     deleteit () {
       this.remove()
+      console.log(this.currentUser)
     },
     updateData: function (e) {
       // v-model Form handling
-      this.$store.commit({
-        type: 'updateData',
-        name: e.target.name,
-        value: e.target.value
-      })
+      this.update({type: 'updateData',name:e.target.name,value:e.target.value})
+//      this.$store.commit({
+//        type: 'updateData',
+//        name: e.target.name,
+//        value: e.target.value
+//      })
     },
     login () {
       this.$store.dispatch({
         type: 'login',
-        email: this.email,
-        token: this.token
+        email: this.email.temp_email,
+        token: this.token.temp_token
       }).then(res => {
         console.log(res)
         // Success handle
@@ -58,8 +60,12 @@ export default {
       })
     },
     ...mapMutations({
-      remove: 'REMOVE_COUNTER' // 将 `this.add()` 映射为 `this.$store.commit('increment')`
-    })
+      remove: 'REMOVE_COUNTER',
+      update: 'updateData'
+    }),
+    ...mapActions([
+      'someAsyncTask'
+    ])
   },
   computed: {
     ...mapState({
@@ -68,7 +74,7 @@ export default {
       token: state => state.active
     }),
     ...mapGetters([
-      'add'
+      'currentUser'
     ])
   },
   watch: {
